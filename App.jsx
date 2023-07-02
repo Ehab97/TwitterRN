@@ -13,6 +13,7 @@ import Settings from "./src/screens/Settings";
 import Search from "./src/screens/Search";
 import Notifications from "./src/screens/Notifications";
 import { Ionicons } from "@expo/vector-icons";
+import TweetDropDwonAction from "./src/components/ui/TweetDropDwonAction";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -55,6 +56,16 @@ const HomeStackNavigator = () => {
         options={{
           title: "",
           headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="TweetAction"
+        component={TweetDropDwonAction}
+        options={{
+          title: "",
+          headerShown: true,
+          presentation: "modal",
+          cardStyle: { height: "50%" },
         }}
       />
     </Stack.Navigator>
