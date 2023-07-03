@@ -12,21 +12,29 @@ const TweetView = () => {
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
+  const goToProfile = () => {
+    navigation.push(
+      "Profile"
+      // , { id: item.user.id }
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.flexRow, styles.justifyContentSpaceBetween, styles.padding15]}>
-        <View style={[styles.userInfo, styles.flexRow, styles.alignItemsFlexStart]}>
-          <Image
-            style={styles.userImage}
-            source={{
-              uri: "https://picsum.photos/300/300",
-            }}
-          />
-          <View>
-            <Text style={styles.name}>John Doe</Text>
-            <Text style={styles.username}>@johndoe</Text>
+        <TouchableOpacity onPress={goToProfile}>
+          <View style={[styles.userInfo, styles.flexRow, styles.alignItemsFlexStart]}>
+            <Image
+              style={styles.userImage}
+              source={{
+                uri: "https://picsum.photos/300/300",
+              }}
+            />
+            <View>
+              <Text style={styles.name}>John Doe</Text>
+              <Text style={styles.username}>@johndoe</Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("TweetAction");
