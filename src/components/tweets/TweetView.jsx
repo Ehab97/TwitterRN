@@ -4,7 +4,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import TweetIcon from "../ui/TweetIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import DropdownToggle from "../ui/DropDownToggle";
 
 const TweetView = () => {
   const navigation = useNavigation();

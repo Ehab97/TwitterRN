@@ -1,17 +1,18 @@
-import { View, Text,StyleSheet } from 'react-native'
-import React from 'react'
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import NewTweetForm from "../components/tweets/NewTweetForm";
 
 const NewTweet = () => {
   return (
-      <View style={styles.container}>
-      <Text>NewTweet</Text>
+    <View style={styles.container}>
+      <NewTweetForm />
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
   },
 });
-export default NewTweet
+export default NewTweet;
