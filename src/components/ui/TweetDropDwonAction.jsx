@@ -1,67 +1,52 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import { View, Text,StyleSheet } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { FlatList } from "react-native-gesture-handler";
 
 const options = [
   {
-    text: "Not interested in this Tweet",
-    iconName: "trash-bin-outline",
-    iconColor: "gray",
+    id: 1,
+    label: "Delete",
+    icon: <Ionicons name="trash-outline" size={24} color="black" />,
   },
   {
-    text: "Unfollow",
-    iconName: "person-remove-outline",
-    iconColor: "gray",
+    id: 2,
+    label: "Edit",
+    icon: <Ionicons name="create-outline" size={24} color="black" />,
   },
   {
-    text: "Mute",
-    iconName: "volume-mute-outline",
-    iconColor: "gray",
+    id: 3,
+    label: "block user",
+    icon: <Ionicons name="person-remove-outline" size={24} color="black" />,
   },
   {
-    text: "Block",
-    iconName: "lock-closed-outline",
-    iconColor: "gray",
+    id: 4,
+    label: "mute user",
+    icon: <Ionicons name="volume-mute-outline" size={24} color="black" />,
   },
   {
-    text: "Report Tweet",
-    iconName: "flag-outline",
-    iconColor: "gray",
+    id: 5,
+    label: "report tweet",
+    icon: <Ionicons name="alert-circle-outline" size={24} color="black" />,
   },
 ];
 
 const TweetDropDwonAction = () => {
-  const handlePress = (item) => {};
+  const [clickedOption, setClickedOption] = useState(null);
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        flex: 1,
-      }}
-    >
+    <View>
       <FlatList
         data={options}
         renderItem={({ item }) => (
-          <Pressable onPress={() => handlePress(item)}>
-            <View style={styles.content}>
-              <Ionicons name={item.iconName} size={24} color={item.iconColor} />
-              <Text style={{ marginLeft: 8, fontSize: 18, color: item.iconColor }}>{item.text}</Text>
-            </View>
-          </Pressable>
+          <View>
+            <Text>{item.label}</Text>
+            {item.icon}
+          </View>
         )}
-        keyExtractor={(item) => item.text}
-        ItemSeparatorComponent={() => <View style={styles.tweetSeparator} />}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  content: { flexDirection: "row", alignItems: "center", marginRight: 16, padding: 15 },
-  tweetSeparator: {
-    borderBottomColor: "#CED0CE",
-    borderBottomWidth: 1,
-  },
-});
 
 export default TweetDropDwonAction;

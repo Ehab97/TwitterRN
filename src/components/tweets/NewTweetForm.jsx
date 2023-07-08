@@ -4,7 +4,8 @@ import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Alert } fro
 import { COLORS } from "../../helpers/colors";
 
 import { Ionicons } from "@expo/vector-icons";
-import CustomModal from "../ui/Modal";
+// import CustomModal from "../ui/Modal";
+import { useNavigation } from "@react-navigation/native";
 
 const options = ["Public", "Followers", "Only me"];
 
@@ -13,6 +14,7 @@ const NewTweetForm = () => {
   const [selectedOption, setSelectedOption] = React.useState(options[0]);
   const [charCount, setCharCount] = React.useState(280);
   const [showInput, setShowInput] = React.useState(true);
+  const navigation = useNavigation();
   const handleSelect = (option) => {
     setSelectedOption(option);
   };
@@ -23,7 +25,8 @@ const NewTweetForm = () => {
   };
 
   const handleTweetClick = () => {
-    if (charCount >= 0) {
+    if (tweet.length > 280) {
+      navigation.navigate("Tab");
     } else {
       Alert.alert("Tweet is too long and must be less than 280 characters");
     }
@@ -41,7 +44,9 @@ const NewTweetForm = () => {
   return (
     <View>
       <View style={styles.formHeader}>
-        <Text style={styles.charCount}>character left : {charCount}</Text>
+        <Text style={tweet.length > 250 ? styles.charCountExceeded : styles.charCount}>
+          character left : {280 - tweet.length}
+        </Text>
         <TouchableOpacity style={styles.formButton} onPress={handleTweetClick}>
           <Text style={styles.buttonText}>Tweet</Text>
         </TouchableOpacity>
@@ -67,16 +72,16 @@ const NewTweetForm = () => {
             style={styles.formInput}
             placeholder="What's happening?"
             placeholderTextColor={COLORS.gray}
-            multiline={true}
-            numberOfLines={4}
-            onChangeText={(text) => handleChangeText(text)}
+            multiline
+            onChangeText={setTweet}
             value={tweet}
+            maxLength={280}
           />
         )}
       </View>
-      <CustomModal visible={modalVisible} onClose={handleCloseModal}>
+      {/* <CustomModal visible={modalVisible} onClose={handleCloseModal}>
         <Text>This is the modal content.</Text>
-      </CustomModal>
+      </CustomModal> */}
     </View>
   );
 };
@@ -90,6 +95,9 @@ const styles = StyleSheet.create({
   },
   charCount: {
     color: "grey",
+  },
+  charCountExceeded: {
+    color: "red",
   },
   buttonText: {
     color: "white",
@@ -132,7 +140,7 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   formInput: {
-    height: 100,
+    // height: 100,
     fontSize: 20,
     color: "black",
     marginLeft: 10,
