@@ -1,11 +1,10 @@
 import axios from "axios";
 import { fireBase_URL } from "./constants/api";
 
-const storeTweet = async (expenseData) => {
+const storeTweet = async (tweetData) => {
   try {
-    const response = await axios.post(`${fireBase_URL}tweet.json`, expenseData);
+    const response = await axios.post(`${fireBase_URL}tweet.json`, tweetData);
     const id = response.data.name;
-
     return id;
   } catch (err) {
     console.log(err);
@@ -15,7 +14,6 @@ const storeTweet = async (expenseData) => {
 const getTweets = async () => {
   try {
     const response = await axios.get(`${fireBase_URL}tweet.json`);
-
     const expenses = [];
     for (const key in response.data) {
       expenses.push({
@@ -30,9 +28,9 @@ const getTweets = async () => {
   }
 };
 
-const updateTweet = async (id, expenseData) => {
+const updateTweet = async (id, tweetData) => {
   try {
-    const response = await axios.put(`${fireBase_URL}expenses/${id}.json`, expenseData);
+    const response = await axios.put(`${fireBase_URL}expenses/${id}.json`, tweetData);
     console.log(response);
     return response.data.name;
   } catch (error) {
@@ -50,4 +48,4 @@ const deleteTweet = async (id) => {
   }
 };
 
-export { storeExpense, getExpenses, updateExpense, deleteExpense };
+export { storeTweet, getTweets, updateTweet, deleteTweet };

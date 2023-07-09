@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { COLORS } from '../../helpers/colors';
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { COLORS } from "../../helpers/colors";
+import { storeTweet } from "../../utlis/http";
 
-const options = ['Public', 'Followers', 'Only me'];
+const options = ["Public", "Followers", "Only me"];
 
 const NewTweetForm = () => {
-  const [tweet, setTweet] = useState('');
+  const [tweet, setTweet] = useState("");
   const [selectedOption, setSelectedOption] = useState(options[0]);
   const [charCount, setCharCount] = useState(280);
   const [showInput, setShowInput] = useState(true);
@@ -21,14 +22,25 @@ const NewTweetForm = () => {
     setCharCount(280 - text.length);
   };
 
-  const handleTweetClick = () => {
+  const handleTweetClick = async () => {
     if (tweet.length <= 280) {
-      navigation.navigate('Tab');
+      const newTweet = {
+        userId: 1,
+        content: tweet,
+        date: new Date(),
+      };
+      try {
+        const res = await storeTweet(newTweet);
+        console.log("res", res);
+        navigation.navigate("Tab");
+      } catch (error) {
+        console.log("error", error);
+      }
     } else {
-      Alert.alert('Tweet is too long and must be less than 280 characters');
+      Alert.alert("Tweet is too long and must be less than 280 characters");
     }
   };
-console.log('tweet', tweet,tweet.length);
+  console.log("tweet", tweet, tweet.length);
   return (
     <View>
       <View style={styles.formHeader}>
@@ -44,7 +56,7 @@ console.log('tweet', tweet,tweet.length);
           <Image
             style={styles.fromImage}
             source={{
-              uri: 'https://picsum.photos/300/300',
+              uri: "https://picsum.photos/300/300",
             }}
           />
         </View>
@@ -66,19 +78,19 @@ console.log('tweet', tweet,tweet.length);
 
 const styles = StyleSheet.create({
   formHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 15,
   },
   charCount: {
-    color: 'gray',
+    color: "gray",
   },
   charCountExceeded: {
-    color: 'gray',
+    color: "gray",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
   },
   formButton: {
     backgroundColor: COLORS.primary,
@@ -88,11 +100,11 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     padding: 15,
-    position: 'relative',
+    position: "relative",
   },
   formImageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   fromImage: {
     width: 50,
@@ -102,10 +114,9 @@ const styles = StyleSheet.create({
   },
   formInput: {
     fontSize: 20,
-    color: 'black',
+    color: "black",
     marginLeft: 10,
   },
 });
 
 export default NewTweetForm;
-

@@ -48,7 +48,7 @@ export const authenticate = async (mode, email, password) => {
 };
 
 const getErrorMessage = (error) => {
-    console.log('response',error.response);
+  console.log("response", error.response);
   if (error.response) {
     switch (error.response.status) {
       case ResponseStatus.NOT_FOUND:
