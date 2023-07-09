@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import React from "react";
 import TweetLists from "../components/tweets/TweetLists";
 
-export const TWEETS = [
+const TWEETS = [
   {
     id: "t1",
     user: {

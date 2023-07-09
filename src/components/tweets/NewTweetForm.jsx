@@ -1,20 +1,17 @@
-import React from "react";
-import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Alert } from "react-native";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { COLORS } from '../../helpers/colors';
 
-import { COLORS } from "../../helpers/colors";
-
-import { Ionicons } from "@expo/vector-icons";
-// import CustomModal from "../ui/Modal";
-import { useNavigation } from "@react-navigation/native";
-
-const options = ["Public", "Followers", "Only me"];
+const options = ['Public', 'Followers', 'Only me'];
 
 const NewTweetForm = () => {
-  const [tweet, setTweet] = React.useState("");
-  const [selectedOption, setSelectedOption] = React.useState(options[0]);
-  const [charCount, setCharCount] = React.useState(280);
-  const [showInput, setShowInput] = React.useState(true);
+  const [tweet, setTweet] = useState('');
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [charCount, setCharCount] = useState(280);
+  const [showInput, setShowInput] = useState(true);
   const navigation = useNavigation();
+
   const handleSelect = (option) => {
     setSelectedOption(option);
   };
@@ -25,27 +22,18 @@ const NewTweetForm = () => {
   };
 
   const handleTweetClick = () => {
-    if (tweet.length > 280) {
-      navigation.navigate("Tab");
+    if (tweet.length <= 280) {
+      navigation.navigate('Tab');
     } else {
-      Alert.alert("Tweet is too long and must be less than 280 characters");
+      Alert.alert('Tweet is too long and must be less than 280 characters');
     }
   };
-  const [modalVisible, setModalVisible] = React.useState(false);
-
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-
+console.log('tweet', tweet,tweet.length);
   return (
     <View>
       <View style={styles.formHeader}>
-        <Text style={tweet.length > 250 ? styles.charCountExceeded : styles.charCount}>
-          character left : {280 - tweet.length}
+        <Text style={charCount < 0 ? styles.charCountExceeded : styles.charCount}>
+          {charCount < 0 ? `Exceeded by ${charCount * -1}` : `Characters left: ${charCount}`}
         </Text>
         <TouchableOpacity style={styles.formButton} onPress={handleTweetClick}>
           <Text style={styles.buttonText}>Tweet</Text>
@@ -56,16 +44,9 @@ const NewTweetForm = () => {
           <Image
             style={styles.fromImage}
             source={{
-              uri: "https://picsum.photos/300/300",
+              uri: 'https://picsum.photos/300/300',
             }}
           />
-
-          {/* <TouchableOpacity onPress={handleOpenModal}>
-            <View style={styles.selectionButton}>
-              <Text style={styles.text}>{selectedOption}</Text>
-              <Ionicons name="chevron-down-outline" size={22} color={COLORS.primary} />
-            </View>
-          </TouchableOpacity> */}
         </View>
         {showInput && (
           <TextInput
@@ -73,34 +54,31 @@ const NewTweetForm = () => {
             placeholder="What's happening?"
             placeholderTextColor={COLORS.gray}
             multiline
-            onChangeText={setTweet}
+            onChangeText={handleChangeText}
             value={tweet}
             maxLength={280}
           />
         )}
       </View>
-      {/* <CustomModal visible={modalVisible} onClose={handleCloseModal}>
-        <Text>This is the modal content.</Text>
-      </CustomModal> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   formHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 15,
   },
   charCount: {
-    color: "grey",
+    color: 'gray',
   },
   charCountExceeded: {
-    color: "red",
+    color: 'gray',
   },
   buttonText: {
-    color: "white",
+    color: 'white',
   },
   formButton: {
     backgroundColor: COLORS.primary,
@@ -109,13 +87,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   formContainer: {
-    // flexDirection: "row",
     padding: 15,
-    position: "relative",
+    position: 'relative',
   },
   formImageContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   fromImage: {
     width: 50,
@@ -123,28 +100,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginBottom: 10,
   },
-  selectionButton: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 2,
-    paddingHorizontal: 5,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    borderRadius: 13,
-    backgroundColor: "white",
-    marginLeft: 10,
-    width: 100,
-  },
-  text: {
-    color: COLORS.primary,
-  },
   formInput: {
-    // height: 100,
     fontSize: 20,
-    color: "black",
+    color: 'black',
     marginLeft: 10,
   },
 });
 
 export default NewTweetForm;
+
