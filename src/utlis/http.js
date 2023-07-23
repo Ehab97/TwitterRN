@@ -22,6 +22,16 @@ export const createTweet = async (tweet) => {
   }
 };
 
+export const getTweetById = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tweets/${id}`);
+    console.log({ response: response.data.tweet });
+    return response.data.tweet;
+  } catch (error) {
+    console.log(`Delete tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
 export const deleteTweet = async (id) => {
   try {
     const response = await axios.delete(`${BASE_URL}/tweets/${id}`);
@@ -64,7 +74,7 @@ export const shareTweet = async (id) => {
 
 export const getMyTweets = async (userId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/tweets/${userId}`);
+    const response = await axios.get(`${BASE_URL}/tweets/user/${userId}`);
     return response.data.tweets;
   } catch (error) {
     console.log(`Get tweet failed: ${error}`);

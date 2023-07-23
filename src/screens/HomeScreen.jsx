@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, ToastAndroid } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import TweetLists from "../components/tweets/TweetLists";
 import { AuthContext } from "../store/context/auth-context";
@@ -140,11 +140,11 @@ const HomeScreen = ({ navigation }) => {
   const authCTX = useContext(AuthContext);
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
   const fetchTweets = async () => {
     setLoading(true);
     try {
       const response = await getAllTweets();
-  
       setTweets(response?.tweets);
     } catch (error) {
       console.log(error);
@@ -152,13 +152,37 @@ const HomeScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await fetchTweets();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRefreshing(false);
+    }
+    // if (listData.length < 10) {
+    //   try {
+    //     const response = await getAllTweets();
+    //     setTweets(response?.tweets);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }finally{
+    //     setRefreshing(false)
+    //   }
+    // }
+    // else{
+    //   ToastAndroid.show('No more new data available', ToastAndroid.SHORT);
+    //   setRefreshing(false)
+    // }
+  }, [refreshing]);
   useEffect(() => {
-    fetchTweets();
+    // fetchTweets();
   }, []);
   if (loading) return <LoadingOverlay visible={loading} />;
   return (
     <View style={styles.container}>
-      <TweetLists tweets={tweets} />
+      <TweetLists tweets={tweets} isRefreshing={refreshing} onRefresh={onRefresh} />
     </View>
   );
 };

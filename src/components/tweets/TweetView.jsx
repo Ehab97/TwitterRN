@@ -5,12 +5,13 @@ import TweetIcon from "../ui/TweetIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-const TweetView = () => {
+const TweetView = ({ tweet, user }) => {
   const navigation = useNavigation();
   const handleLikeClick = () => {};
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
+  console.log({ tweet, user });
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.flexRow, styles.justifyContentSpaceBetween, styles.padding15]}>
@@ -18,12 +19,12 @@ const TweetView = () => {
           <Image
             style={styles.userImage}
             source={{
-              uri: "https://picsum.photos/300/300",
+              uri: user?.image,
             }}
           />
           <View>
-            <Text style={styles.name}>John Doe</Text>
-            <Text style={styles.username}>@johndoe</Text>
+            <Text style={styles.name}>{user?.name}</Text>
+            <Text style={styles.username}>@{user?.userName}</Text>
           </View>
         </View>
         <TouchableOpacity
@@ -35,23 +36,19 @@ const TweetView = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.tweetContainer}>
-        <Text style={styles.tweet}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit perferendis qui reprehenderit incidunt harum
-          veritatis mollitia laborum. Soluta reprehenderit et provident odio corporis! Ratione, optio. Illum et veniam
-          sapiente fuga.
-        </Text>
+        <Text style={styles.tweet}>{tweet?.content}</Text>
       </View>
       <View style={[styles.footerIno, styles.flexRow, styles.padding15]}>
         <View style={[styles.flexRow, styles.mr10]}>
-          <Text style={styles.number}>625</Text>
+          <Text style={styles.number}>{tweet?.retweets}</Text>
           <Text style={styles.text}>Retweets</Text>
         </View>
         <View style={[styles.flexRow, styles.mr10]}>
-          <Text style={styles.number}>38</Text>
-          <Text style={styles.text}>Quote Tweets</Text>
+          <Text style={styles.number}>{tweet?.comments}</Text>
+          <Text style={styles.text}>Comments</Text>
         </View>
         <View style={[styles.flexRow]}>
-          <Text style={styles.number}>2,634</Text>
+          <Text style={styles.number}>{tweet?.likes}</Text>
           <Text style={styles.text}>Likes</Text>
         </View>
       </View>

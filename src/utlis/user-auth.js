@@ -15,12 +15,9 @@ export const login = async (email, password) => {
   }
 };
 
-export const register = async (email, password) => {
+export const register = async (formData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users`, {
-      email,
-      password,
-    });
+    const response = await axios.post(`${BASE_URL}/users`, formData);
     return response.data.data;
   } catch (error) {
     console.log(`Register failed:${error}`);

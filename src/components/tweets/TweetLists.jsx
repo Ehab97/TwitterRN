@@ -5,7 +5,7 @@ import Tweet from "./Tweet";
 import { COLORS } from "../../helpers/colors";
 import { useNavigation } from "@react-navigation/native";
 
-const TweetLists = ({ tweets }) => {
+const TweetLists = ({ tweets, isRefreshing, onRefresh }) => {
   const navigation = useNavigation();
   const goToNewTweet = () => {
     navigation.navigate("NewTweet");
@@ -17,6 +17,8 @@ const TweetLists = ({ tweets }) => {
         renderItem={({ item }) => <Tweet item={item} />}
         keyExtractor={(item) => item._id}
         ItemSeparatorComponent={() => <View style={styles.tweetSeparator} />}
+        refreshing={isRefreshing}
+        onRefresh={onRefresh}
       />
       <Pressable onPress={goToNewTweet} style={({ pressed }) => [styles.floatingButton, pressed && styles.pressed]}>
         <Ionicons name="add" size={32} color="white" />

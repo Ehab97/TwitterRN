@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getUserInfo } from "../../utlis/user-auth";
 import LoadingOverlay from "../ui/LoadingOverlay";
 
-const Tweet = ({ item }) => {
+const Tweet = React.memo(({ item }) => {
   const navigation = useNavigation();
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
@@ -40,31 +40,27 @@ const Tweet = ({ item }) => {
   };
 
   const goToTweet = () => {
-    navigation.push(
-      "Tweet"
-      // , { id: item.id }
-    );
+    navigation.push("Tweet", { tweetId: item._id });
   };
   const handleLikeClick = () => {};
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
 
-  const fetchUser = async () => {
+  const fetchUser = React.useCallback(async () => {
     setLoading(true);
     try {
       const response = await getUserInfo(item.user.id);
-
       setUser(response);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [item.user.id]);
   React.useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
   if (loading) {
     return <LoadingOverlay />;
   }
@@ -100,34 +96,45 @@ const Tweet = ({ item }) => {
           </View>
         </TouchableOpacity>
         <View style={[styles.footer, styles.flexRow]}>
-          <TweetIcon
-            onPress={handleCommentClick}
-            text={item.comments}
-            iconName="chatbubble-outline"
-            iconSize={22}
-            iconColor="grey"
-          />
-          <TweetIcon
-            onPress={handleRetweetClick}
-            text={item.retweets}
-            iconName="repeat-outline"
-            iconSize={22}
-            iconColor="grey"
-          />
-          <TweetIcon
-            onPress={handleLikeClick}
-            text={item.likes}
-            iconName="heart-outline"
-            iconSize={22}
-            iconColor="grey"
-            isLiked
-          />
-          <TweetIcon onPress={handleShareClick} iconName="share-outline" iconSize={22} iconColor="grey" />
+          <View style={[styles.footerActions, styles.flexRow]}>
+            <TweetIcon
+              onPress={handleCommentClick}
+              text={item.comments}
+              iconName="chatbubble-outline"
+              iconSize={22}
+              iconColor="grey"
+              style={styles.icon}
+            />
+            <TweetIcon
+              onPress={handleRetweetClick}
+              text={item.retweets}
+              iconName="repeat-outline"
+              iconSize={22}
+              iconColor="grey"
+              style={styles.icon}
+            />
+            <TweetIcon
+              onPress={handleLikeClick}
+              text={item.likes}
+              iconName="heart-outline"
+              iconSize={22}
+              iconColor="grey"
+              isLiked
+              style={styles.icon}
+            />
+            <TweetIcon
+              onPress={handleShareClick}
+              iconName="share-outline"
+              iconSize={22}
+              iconColor="grey"
+              style={styles.icon}
+            />
+          </View>
         </View>
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   header: {
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     alignItems: "center",
     // width: "100%",
   },
@@ -178,7 +185,14 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   footer: {
+    // justifyContent: "space-between",
+    width: "100%",
+  },
+  footerActions: {
     justifyContent: "space-between",
+  },
+  icon: {
+    marginRight: 24,
   },
 });
 

@@ -2,12 +2,14 @@ import React from "react";
 import { View, Image, TouchableOpacity, Text, ActivityIndicator, StyleSheet, Linking } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
+import LoadingOverlay from "../ui/LoadingOverlay";
 const ProfileHeader = ({ user, currentUserID, followUser, unfollowUser, isLoading, userId }) => {
   console.log("profile header", user);
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <ActivityIndicator style={{ marginTop: 8 }} size="large" color="gray" />
+        // <ActivityIndicator style={{ marginTop: 8 }} size="large" color="gray" />
+        <LoadingOverlay visible={isLoading} />
       ) : (
         <>
           <Image

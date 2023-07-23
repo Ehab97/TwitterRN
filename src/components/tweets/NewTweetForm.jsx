@@ -28,12 +28,12 @@ const NewTweetForm = () => {
     console.log("tweet", tweet);
     if (tweet.length <= 280) {
       try {
-  
         let tweetData = {
           content: tweet,
-          user:{
+          user: {
             id: authCTX.userId,
           },
+          created: new Date().toISOString(),
         };
         console.log("tweetData", tweetData);
         const res = await createTweet(tweetData);

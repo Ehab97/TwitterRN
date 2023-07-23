@@ -13,7 +13,12 @@ function SignupScreen() {
   const signupHandler = async ({ email, password }) => {
     setLoading(true);
     try {
-      const res = await register(email, password);
+      let formData={
+        email,
+        password,
+        image:`https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`,
+      }
+      const res = await register(formData);
       authCTX.authenticate(res.token, res.user._id);
       console.log(res);
     } catch (error) {
