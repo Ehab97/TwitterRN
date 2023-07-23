@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "../../helpers/colors";
-import { storeTweet } from "../../utlis/http";
+import { createTweet } from "../../utlis/http";
+import { AuthContext } from "../../store/context/auth-context";
 
 const options = ["Public", "Followers", "Only me"];
 
 const NewTweetForm = () => {
+  const authCTX = useContext(AuthContext);
   const [tweet, setTweet] = useState("");
   const [selectedOption, setSelectedOption] = useState(options[0]);
   const [charCount, setCharCount] = useState(280);
@@ -23,14 +25,18 @@ const NewTweetForm = () => {
   };
 
   const handleTweetClick = async () => {
+    console.log("tweet", tweet);
     if (tweet.length <= 280) {
-      const newTweet = {
-        userId: 1,
-        content: tweet,
-        date: new Date(),
-      };
       try {
-        const res = await storeTweet(newTweet);
+  
+        let tweetData = {
+          content: tweet,
+          user:{
+            id: authCTX.userId,
+          },
+        };
+        console.log("tweetData", tweetData);
+        const res = await createTweet(tweetData);
         console.log("res", res);
         navigation.navigate("Tab");
       } catch (error) {
@@ -40,7 +46,6 @@ const NewTweetForm = () => {
       Alert.alert("Tweet is too long and must be less than 280 characters");
     }
   };
-  console.log("tweet", tweet, tweet.length);
   return (
     <View>
       <View style={styles.formHeader}>

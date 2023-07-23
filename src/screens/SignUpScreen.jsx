@@ -5,6 +5,7 @@ import { AuthContext } from "../store/context/auth-context";
 import { createUser } from "../utlis/auth";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import AuthContent from "../components/auth/AuthContent";
+import { register } from "../utlis/user-auth";
 
 function SignupScreen() {
   const authCTX = useContext(AuthContext);
@@ -12,8 +13,8 @@ function SignupScreen() {
   const signupHandler = async ({ email, password }) => {
     setLoading(true);
     try {
-      const res = await createUser(email, password);
-      authCTX.authenticate(res.idToken);
+      const res = await register(email, password);
+      authCTX.authenticate(res.token, res.user._id);
       console.log(res);
     } catch (error) {
       console.log("signupScreen.js error: ", error);

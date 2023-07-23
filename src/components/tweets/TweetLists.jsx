@@ -6,7 +6,6 @@ import { COLORS } from "../../helpers/colors";
 import { useNavigation } from "@react-navigation/native";
 
 const TweetLists = ({ tweets }) => {
-  //   const [tweets, setTweets] = useState([]);
   const navigation = useNavigation();
   const goToNewTweet = () => {
     navigation.navigate("NewTweet");
@@ -16,7 +15,7 @@ const TweetLists = ({ tweets }) => {
       <FlatList
         data={tweets}
         renderItem={({ item }) => <Tweet item={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         ItemSeparatorComponent={() => <View style={styles.tweetSeparator} />}
       />
       <Pressable onPress={goToNewTweet} style={({ pressed }) => [styles.floatingButton, pressed && styles.pressed]}>

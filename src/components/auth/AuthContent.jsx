@@ -6,6 +6,7 @@ import AuthForm from "./AuthForm";
 
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "../../helpers/colors";
+import TwitterForm from "./TwitterForm";
 
 function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
@@ -51,7 +52,8 @@ function AuthContent({ isLogin, onAuthenticate }) {
 
   return (
     <View style={styles.authContent}>
-      <AuthForm isLogin={isLogin} onSubmit={submitHandler} credentialsInvalid={credentialsInvalid} />
+      {/* <AuthForm isLogin={isLogin} onSubmit={submitHandler} credentialsInvalid={credentialsInvalid} /> */}
+      <TwitterForm isLogin={isLogin} onSubmit={submitHandler} credentialsInvalid={credentialsInvalid} />
       <View style={styles.buttons}>
         <FlatButton onPress={switchAuthModeHandler}>{isLogin ? "Create a new user" : "Log in instead"}</FlatButton>
       </View>
@@ -65,14 +67,16 @@ const styles = StyleSheet.create({
   authContent: {
     marginTop: 64,
     marginHorizontal: 32,
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: COLORS.primary800,
-    elevation: 2,
-    shadowColor: "black",
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.35,
-    shadowRadius: 4,
+    // padding: 16,
+    // borderRadius: 8,
+    // backgroundColor: COLORS.primary,
+    // backgroundColor: '#fff',
+    // elevation: 2,
+    // shadowColor: "black",
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowOpacity: 0.35,
+    // shadowRadius: 4,
+  
   },
   buttons: {
     marginTop: 8,

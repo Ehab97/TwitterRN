@@ -1,51 +1,73 @@
 import axios from "axios";
-import { fireBase_URL } from "./constants/api";
+import { BASE_URL } from "./constants/api";
 
-const storeTweet = async (tweetData) => {
+export const getAllTweets = async () => {
   try {
-    const response = await axios.post(`${fireBase_URL}tweet.json`, tweetData);
-    const id = response.data.name;
-    return id;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const getTweets = async () => {
-  try {
-    const response = await axios.get(`${fireBase_URL}tweet.json`);
-    const expenses = [];
-    for (const key in response.data) {
-      expenses.push({
-        id: key,
-        ...response.data[key],
-      });
-    }
-
-    return expenses;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const updateTweet = async (id, tweetData) => {
-  try {
-    const response = await axios.put(`${fireBase_URL}expenses/${id}.json`, tweetData);
-    console.log(response);
-    return response.data.name;
+    const response = await axios.get(`${BASE_URL}/tweets`);
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.log(`Get all tweets failed: ${error}`);
+    throw new Error(`${error}`);
   }
 };
 
-const deleteTweet = async (id) => {
+export const createTweet = async (tweet) => {
+  console.log("createTweet", tweet);
   try {
-    const response = await axios.delete(`${fireBase_URL}tweet/${id}.json`);
-    console.log(response);
-    return response;
+    const response = await axios.post(`${BASE_URL}/tweets`, tweet);
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.log(`Create tweet failed: ${error}`);
+    throw new Error(`${error}`);
   }
 };
 
-export { storeTweet, getTweets, updateTweet, deleteTweet };
+export const deleteTweet = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/tweets/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(`Delete tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
+
+export const updateTweet = async (id, tweet) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/tweets/${id}`, tweet);
+    return response.data;
+  } catch (error) {
+    console.log(`Update tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
+
+export const likeTweet = async (id) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/tweets/${id}/like`);
+    return response.data;
+  } catch (error) {
+    console.log(`Like tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
+
+export const shareTweet = async (id) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/tweets/${id}/share`);
+    return response.data;
+  } catch (error) {
+    console.log(`Share tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
+
+export const getMyTweets = async (userId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tweets/${userId}`);
+    return response.data.tweets;
+  } catch (error) {
+    console.log(`Get tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};

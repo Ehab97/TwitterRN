@@ -5,6 +5,7 @@ import { AuthContext } from "../store/context/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import AuthContent from "../components/auth/AuthContent";
 import { loginUser } from "../utlis/auth";
+import { login } from "../utlis/user-auth";
 
 function LoginScreen() {
   const authCTX = useContext(AuthContext);
@@ -12,8 +13,9 @@ function LoginScreen() {
   const loginHandler = async ({ email, password }) => {
     setLoading(true);
     try {
-      const res = await loginUser(email, password);
-      authCTX.authenticate(res.idToken);
+      const res = await login(email, password);
+      console.log("res", res, res.user._id);
+      authCTX.authenticate(res.token, res.user._id);
       console.log(res);
     } catch (error) {
       console.log("loginScreen.js error: ", error);

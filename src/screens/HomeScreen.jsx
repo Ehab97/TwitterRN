@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet, Button } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TweetLists from "../components/tweets/TweetLists";
+import { AuthContext } from "../store/context/auth-context";
+import { getAllTweets, getTweets } from "../utlis/http";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 const TWEETS = [
   {
@@ -134,9 +137,28 @@ const TWEETS = [
 ];
 
 const HomeScreen = ({ navigation }) => {
+  const authCTX = useContext(AuthContext);
+  const [tweets, setTweets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const fetchTweets = async () => {
+    setLoading(true);
+    try {
+      const response = await getAllTweets();
+  
+      setTweets(response?.tweets);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchTweets();
+  }, []);
+  if (loading) return <LoadingOverlay visible={loading} />;
   return (
     <View style={styles.container}>
-      <TweetLists tweets={TWEETS} />
+      <TweetLists tweets={tweets} />
     </View>
   );
 };

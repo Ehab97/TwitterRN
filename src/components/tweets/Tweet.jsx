@@ -4,16 +4,16 @@ import { Inions } from "@expo/vector-icons";
 import TweetIcon from "../ui/TweetIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { getUserInfo } from "../../utlis/user-auth";
+import LoadingOverlay from "../ui/LoadingOverlay";
 
 const Tweet = ({ item }) => {
-  console.log(item);
   const navigation = useNavigation();
+  const [user, setUser] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
 
   const goToProfile = () => {
-    navigation.push(
-      "Profile"
-      // , { id: item.user.id }
-    );
+    navigation.push("Profile", { userId: item.user.id });
   };
 
   const handleCreatedTime = (time) => {
@@ -49,13 +49,33 @@ const Tweet = ({ item }) => {
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
+
+  const fetchUser = async () => {
+    setLoading(true);
+    try {
+      const response = await getUserInfo(item.user.id);
+
+      setUser(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  React.useEffect(() => {
+    fetchUser();
+  }, []);
+  if (loading) {
+    return <LoadingOverlay />;
+  }
+
   return (
     <View style={[styles.container, styles.flexRow]}>
       <TouchableOpacity onPress={goToProfile}>
         <Image
           style={styles.image}
           source={{
-            uri: item.image,
+            uri: user?.image,
           }}
         />
       </TouchableOpacity>
@@ -63,14 +83,14 @@ const Tweet = ({ item }) => {
         <TouchableOpacity onPress={goToProfile}>
           <View style={[styles.header, styles.flexRow]}>
             <Text numberOfLines={1} style={styles.title}>
-              {item.title}
+              {user?.name}
             </Text>
             <Text numberOfLines={1} style={styles.userName}>
-              @{item.user.username}
+              @{user?.userName}
             </Text>
             <Text style={styles.middot}>&middot;</Text>
             <Text numberOfLines={1} style={styles.createdAt}>
-              {handleCreatedTime(item.createdAt)}
+              {handleCreatedTime(item.date)}
             </Text>
           </View>
         </TouchableOpacity>
@@ -82,21 +102,21 @@ const Tweet = ({ item }) => {
         <View style={[styles.footer, styles.flexRow]}>
           <TweetIcon
             onPress={handleCommentClick}
-            text={item.numberOfComments}
+            text={item.comments}
             iconName="chatbubble-outline"
             iconSize={22}
             iconColor="grey"
           />
           <TweetIcon
             onPress={handleRetweetClick}
-            text={item.numberOfRetweets}
+            text={item.retweets}
             iconName="repeat-outline"
             iconSize={22}
             iconColor="grey"
           />
           <TweetIcon
             onPress={handleLikeClick}
-            text={item.numberOfLikes}
+            text={item.likes}
             iconName="heart-outline"
             iconSize={22}
             iconColor="grey"

@@ -21,6 +21,8 @@ import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignUpScreen";
 import { COLORS } from "./src/helpers/colors";
 
+import IconButton from "./src/components/ui/IconButton";
+
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -115,11 +117,16 @@ const TabNavigator = () => {
 };
 
 const AuthedStack = () => {
+  const authCTX = useContext(AuthContext);
+  console.log({ authCTX });
   return (
     <Drawer.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerShown: true,
+        headerRight: ({ tintColor }) => {
+          return <IconButton icon={"exit"} color={tintColor} size={24} onPress={authCTX.logout} />;
+        },
       }}
     >
       <Drawer.Screen
@@ -135,7 +142,7 @@ const AuthedStack = () => {
         name="Settings"
         component={Settings}
         options={{
-          drawerIcon: ({ color, size }) => <Ionicons name="settings" color={color} size={size} />,
+          drawerIcon: ({ color, size }) => <Ionicons name="settings" color={COLORS.primary} size={size} />,
           drawerLabel: "Settings",
         }}
       />
@@ -147,9 +154,9 @@ function UnAuthStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: COLORS.primary500 },
+        headerStyle: { backgroundColor: COLORS.primary },
         headerTintColor: "white",
-        contentStyle: { backgroundColor: COLORS.primary100 },
+        contentStyle: { backgroundColor: "#fff" },
       }}
     >
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -169,9 +176,10 @@ const Root = () => {
     setLoading(true);
     try {
       const token = await AsyncStorage.getItem("token");
+      const userId = await AsyncStorage.getItem("userId");
       if (token) {
-        console.log({ token });
-        authCTX.authenticate(token);
+        console.log({ token, userId });
+        authCTX.authenticate(token, userId);
       }
     } catch (error) {
       console.log(error);

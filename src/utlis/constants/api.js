@@ -1,12 +1,13 @@
-export const fireBase_URL='https://track-expense-app-default-rtdb.firebaseio.com/';
+export const fireBase_URL = "https://rntwitterapp-default-rtdb.firebaseio.com/";
 export const firbaseConfig = {
-    API_KEY: "AIzaSyAwqWSP5TS13i7xAD5JAYXPLyNQ29hcBPg",
-    URL: "https://track-expense-app-default-rtdb.firebaseio.com/",
-  };
-  
-  export const firbaseUrlModes = {
-    signUp: "signUp",
-    signInWithPassword: "signInWithPassword",
-    signInWithCustomToken: "signInWithCustomToken",
-  };
-  
+  API_KEY: "AIzaSyCqTEtpy56R69NVoxDXNgTQAYHxdrxLEa4",
+  URL: fireBase_URL,
+};
+
+export const firbaseUrlModes = {
+  signUp: "signUp",
+  signInWithPassword: "signInWithPassword",
+  signInWithCustomToken: "signInWithCustomToken",
+};
+
+export const BASE_URL = "http://localhost:5000/api/v1";
