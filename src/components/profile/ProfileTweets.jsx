@@ -4,8 +4,19 @@ import { FlatList } from "react-native-gesture-handler";
 import Tweet from "../tweets/Tweet";
 import ProfileHeader from "./ProfileHeader";
 
-function ProfileTweets({ tweets, user, currentUserID, userId, isLoading, unfollowUser, followUser }) {
+function ProfileTweets({
+  tweets,
+  user,
+  currentUserID,
+  userId,
+  isLoading,
+  unfollowUser,
+  followUser,
+  refreshing,
+  onRefresh,
+}) {
   console.log("Prfile tweets", user, currentUserID, userId, isLoading, unfollowUser, followUser);
+
   return (
     <View>
       <FlatList
@@ -24,8 +35,8 @@ function ProfileTweets({ tweets, user, currentUserID, userId, isLoading, unfollo
             unfollowUser={unfollowUser}
           />
         )}
-        // refreshing={isRefreshing}
-        // onRefresh={handleRefresh}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
         // onEndReached={handleEnd}
         // onEndReachedThreshold={0}
         // ListFooterComponent={() => !isAtEndOfScrolling && <ActivityIndicator size="large" color="gray" />}

@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet, Button, ToastAndroid } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import TweetLists from "../components/tweets/TweetLists";
 import { AuthContext } from "../store/context/auth-context";
-import { getAllTweets, getTweets } from "../utlis/http";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import { meregTweetAndUsers } from "../utlis/helpers";
 
 const TWEETS = [
   {
@@ -141,11 +141,31 @@ const HomeScreen = ({ navigation }) => {
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [page, setPage] = useState(1);
+  const [isEndReached, setIsEndReached] = useState(false);
+
+  const getUniqueListBy = (arr, key) => {
+    return [...new Map(arr.map((item) => [item[key], item])).values()];
+  };
+
   const fetchTweets = async () => {
     setLoading(true);
     try {
-      const response = await getAllTweets();
-      setTweets(response?.tweets);
+      const data = await meregTweetAndUsers(page);
+      if (page === 1) setTweets(data);
+      else {
+        setTweets((prevTweets) => {
+          const mergedTweets = [...prevTweets, ...data];
+          // const uniqueTweets2 = Array.from(new Set(mergedTweets.map((tweet) => tweet._id))).map((id) =>
+          //   mergedTweets.find((tweet) => tweet._id === id)
+          // );
+          // console.log(mergedTweets.length, uniqueTweets2.length);
+          const uniqueTweets = getUniqueListBy(mergedTweets, "_id");
+          // console.log(uniqueTweets.length);
+          return uniqueTweets;
+        });
+      }
+      if (data.length === 0) setIsEndReached(true);
     } catch (error) {
       console.log(error);
     } finally {
@@ -154,6 +174,8 @@ const HomeScreen = ({ navigation }) => {
   };
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
+    setPage(1);
+    setIsEndReached(false);
     try {
       await fetchTweets();
     } catch (error) {
@@ -161,28 +183,26 @@ const HomeScreen = ({ navigation }) => {
     } finally {
       setRefreshing(false);
     }
-    // if (listData.length < 10) {
-    //   try {
-    //     const response = await getAllTweets();
-    //     setTweets(response?.tweets);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }finally{
-    //     setRefreshing(false)
-    //   }
-    // }
-    // else{
-    //   ToastAndroid.show('No more new data available', ToastAndroid.SHORT);
-    //   setRefreshing(false)
-    // }
   }, [refreshing]);
-  useEffect(() => {
-    // fetchTweets();
+
+  const handleEndReached = React.useCallback(async () => {
+    console.log("end reached");
+    setPage((prev) => prev + 1);
   }, []);
+  console.log(page, tweets.length);
+  useEffect(() => {
+    fetchTweets();
+  }, [page]);
   if (loading) return <LoadingOverlay visible={loading} />;
   return (
     <View style={styles.container}>
-      <TweetLists tweets={tweets} isRefreshing={refreshing} onRefresh={onRefresh} />
+      <TweetLists
+        tweets={tweets}
+        isRefreshing={refreshing}
+        onRefresh={onRefresh}
+        handleEndReached={handleEndReached}
+        isEndReached={isEndReached}
+      />
     </View>
   );
 };

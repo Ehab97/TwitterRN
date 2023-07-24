@@ -1,9 +1,10 @@
 import axios from "axios";
 import { BASE_URL } from "./constants/api";
 
-export const getAllTweets = async () => {
+export const getAllTweets = async (page = 1, limit = 5) => {
   try {
-    const response = await axios.get(`${BASE_URL}/tweets`);
+    console.log(`${BASE_URL}/tweets?page=${page}&limit=${limit}`);
+    const response = await axios.get(`${BASE_URL}/tweets?page=${page}&limit=${limit}`);
     return response.data;
   } catch (error) {
     console.log(`Get all tweets failed: ${error}`);

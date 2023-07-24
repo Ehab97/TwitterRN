@@ -35,6 +35,15 @@ export const updateUserInfo = async (id, userInfo) => {
   }
 };
 
+export const getAllUserInfo = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users`);
+    return response.data.users;
+  } catch (error) {
+    console.log(`Get user info failed:${error}`);
+    throw new Error(`${error}`);
+  }
+};
 export const getUserInfo = async (id) => {
   try {
     const response = await axios.get(`${BASE_URL}/users/${id}`);

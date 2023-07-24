@@ -13,20 +13,29 @@ const MainProfile = ({ userId, currentUserId, user }) => {
   const route = useRoute();
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await fetchTweets();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshing]);
   console.log("user======>", user);
-  const fetchTweets = async () => {
-    console.log("fetch tweets");
+  const fetchTweets = React.useCallback(async () => {
     setLoading(true);
     try {
       const response = await getMyTweets(userId);
-      //   console.log({ response });
       setTweets(response);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
   useEffect(() => {
     if (userId) fetchTweets();
   }, [userId]);
@@ -77,6 +86,8 @@ const MainProfile = ({ userId, currentUserId, user }) => {
           currentUserID={currentUserId}
           unfollowUser={unfollowUser}
           followUser={followUser}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       )}
     </View>

@@ -1,16 +1,12 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import React from "react";
-import { Inions } from "@expo/vector-icons";
 import TweetIcon from "../ui/TweetIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { getUserInfo } from "../../utlis/user-auth";
-import LoadingOverlay from "../ui/LoadingOverlay";
+
 
 const Tweet = React.memo(({ item }) => {
   const navigation = useNavigation();
-  const [user, setUser] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
 
   const goToProfile = () => {
     navigation.push("Profile", { userId: item.user.id });
@@ -47,31 +43,13 @@ const Tweet = React.memo(({ item }) => {
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
 
-  const fetchUser = React.useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await getUserInfo(item.user.id);
-      setUser(response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [item.user.id]);
-  React.useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-  if (loading) {
-    return <LoadingOverlay />;
-  }
-
   return (
     <View style={[styles.container, styles.flexRow]}>
       <TouchableOpacity onPress={goToProfile}>
         <Image
           style={styles.image}
           source={{
-            uri: user?.image,
+            uri: item?.user?.image,
           }}
         />
       </TouchableOpacity>
@@ -79,10 +57,10 @@ const Tweet = React.memo(({ item }) => {
         <TouchableOpacity onPress={goToProfile}>
           <View style={[styles.header, styles.flexRow]}>
             <Text numberOfLines={1} style={styles.title}>
-              {user?.name}
+              {item?.user?.name}
             </Text>
             <Text numberOfLines={1} style={styles.userName}>
-              @{user?.userName}
+              @{item?.user?.userName}
             </Text>
             <Text style={styles.middot}>&middot;</Text>
             <Text numberOfLines={1} style={styles.createdAt}>
