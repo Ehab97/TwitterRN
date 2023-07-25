@@ -1,10 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "./constants/api";
+import axiosConfig from "./constants/config";
 
 export const login = async (email, password) => {
-  console.log(`${BASE_URL}/users/login`);
+  console.log(`/users/login`);
   try {
-    const response = await axios.post(`${BASE_URL}/users/login`, {
+    const response = await axiosConfig.post(`/users/login`, {
       email,
       password,
     });
@@ -17,7 +16,7 @@ export const login = async (email, password) => {
 
 export const register = async (formData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users`, formData);
+    const response = await axiosConfig.post(`/users`, formData);
     return response.data.data;
   } catch (error) {
     console.log(`Register failed:${error}`);
@@ -27,7 +26,7 @@ export const register = async (formData) => {
 
 export const updateUserInfo = async (id, userInfo) => {
   try {
-    const response = await axios.put(`${BASE_URL}/users/${id}`, userInfo);
+    const response = await axiosConfig.put(`/users/${id}`, userInfo);
     return response.data.data;
   } catch (error) {
     console.log(`Update user info failed:${error}`);
@@ -37,7 +36,7 @@ export const updateUserInfo = async (id, userInfo) => {
 
 export const getAllUserInfo = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/users`);
+    const response = await axiosConfig.get(`/users`);
     return response.data.users;
   } catch (error) {
     console.log(`Get user info failed:${error}`);
@@ -46,7 +45,7 @@ export const getAllUserInfo = async () => {
 };
 export const getUserInfo = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/users/${id}`);
+    const response = await axiosConfig.get(`/users/${id}`);
     return response.data.user;
   } catch (error) {
     console.log(`Get user info failed:${error}`);
@@ -56,7 +55,7 @@ export const getUserInfo = async (id) => {
 
 export const followUserAction = async (userId, userToFollowId) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/${userId}/follow`, {
+    const response = await axiosConfig.post(`/users/${userId}/follow`, {
       userId: userToFollowId,
     });
     return response.data;
@@ -67,7 +66,7 @@ export const followUserAction = async (userId, userToFollowId) => {
 };
 export const unFollowUserAction = async (userId, userToUnFollowId) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users/${userId}/unfollow`, {
+    const response = await axiosConfig.post(`/users/${userId}/unfollow`, {
       userId: userToUnFollowId,
     });
     return response.data;

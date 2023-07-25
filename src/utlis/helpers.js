@@ -1,5 +1,5 @@
-import { getAllTweets } from "./http";
-import { getAllUserInfo } from "./user-auth";
+import { getAllTweets, getTweetById } from "./http";
+import { getAllUserInfo, getUserInfo } from "./user-auth";
 
 export const meregTweetAndUsers = async (page, limit) => {
   try {
@@ -15,4 +15,19 @@ export const meregTweetAndUsers = async (page, limit) => {
     console.log("items", items.length);
     return items;
   } catch (error) {}
+};
+
+export const getTweetByIdWithUser = async (id) => {
+  console.log("getTweetByIdWithUser", id);
+  try {
+    const tweet = await getTweetById(id);
+    console.log("tweet==>", tweet);
+    const userId = tweet.user.id;
+    const user = await getUserInfo(userId);
+    console.log("user==>", user);
+    const newItem = { ...tweet, user: { ...tweet.user, ...user } };
+    return newItem;
+  } catch (error) {
+    console.log('getTweetByIdWithUser error', error);
+  }
 };
