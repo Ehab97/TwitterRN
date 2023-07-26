@@ -1,4 +1,4 @@
-import { getAllTweets, getTweetById } from "./http";
+import { getAllTweets, getMyTweets, getTweetById } from "./http";
 import { getAllUserInfo, getUserInfo } from "./user-auth";
 
 export const meregTweetAndUsers = async (page, limit) => {
@@ -28,6 +28,22 @@ export const getTweetByIdWithUser = async (id) => {
     const newItem = { ...tweet, user: { ...tweet.user, ...user } };
     return newItem;
   } catch (error) {
-    console.log('getTweetByIdWithUser error', error);
+    console.log("getTweetByIdWithUser error", error);
   }
+};
+
+export const getMyTweetsForUser = async (userId, page = 1, limit = 10) => {
+  console.log("getMyTweetsWithUser", userId);
+  try {
+    const tweets = await getMyTweets(userId, page, limit);
+    console.log("tweets==>", tweets.length);
+    const user = await getUserInfo(userId);
+    console.log("user==>", user);
+    const items = tweets.map((tweet) => {
+      const newItem = { ...tweet, user: { ...tweet.user, ...user } };
+      return newItem;
+    });
+    console.log("items", items.length);
+    return items;
+  } catch (error) {}
 };

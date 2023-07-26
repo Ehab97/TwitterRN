@@ -7,6 +7,7 @@ import TweetLists from "../tweets/TweetLists";
 import ProfileHeader from "./ProfileHeader";
 import ProfileTweets from "./ProfileTweets";
 import { followUserAction, unFollowUserAction } from "../../utlis/user-auth";
+import { getMyTweetsForUser } from "../../utlis/helpers";
 
 const MainProfile = ({ userId, currentUserId, user }) => {
   const navigation = useNavigation();
@@ -14,8 +15,12 @@ const MainProfile = ({ userId, currentUserId, user }) => {
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(1);
+  const [isEndReached, setIsEndReached] = useState(false);
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
+    setPage(1);
+    setIsEndReached(false);
     try {
       await fetchTweets();
     } catch (error) {
@@ -24,22 +29,39 @@ const MainProfile = ({ userId, currentUserId, user }) => {
       setRefreshing(false);
     }
   }, [refreshing]);
-  console.log("user======>", user);
+
   const fetchTweets = React.useCallback(async () => {
     setLoading(true);
     try {
-      const response = await getMyTweets(userId);
-      setTweets(response);
+      const response = await getMyTweetsForUser(userId, page);
+      // console.log({ response });
+      if (page === 1) setTweets(response);
+      else {
+        setTweets((prevTweets) => {
+          const mergedTweets = [...prevTweets, ...response];
+          return mergedTweets;
+          const uniqueTweets = Array.from(new Set(mergedTweets.map((tweet) => tweet._id))).map((id) =>
+            mergedTweets.find((tweet) => tweet._id === id)
+          );
+          return uniqueTweets;
+        });
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, [userId, page]);
+
+  const handleEndReached = React.useCallback(async () => {
+    console.log("end reached");
+    setIsEndReached(true);
+    setPage((prev) => prev + 1);
+  }, []);
   useEffect(() => {
     if (userId) fetchTweets();
-  }, [userId]);
-
+  }, [page, userId]);
+  console.log(page, tweets.length);
   const followUser = async () => {
     setLoading(true);
     try {
@@ -65,18 +87,8 @@ const MainProfile = ({ userId, currentUserId, user }) => {
 
   return (
     <View style={styles.container}>
-      {user && (
-        <ProfileHeader
-          user={user}
-          isLoading={loading}
-          userId={userId}
-          currentUserID={currentUserId}
-          unfollowUser={unfollowUser}
-          followUser={followUser}
-        />
-      )}
-      {loading ? (
-        <LoadingOverlay visible={loading} />
+      {isEndReached ? (
+        <LoadingOverlay visible={isEndReached} />
       ) : (
         <ProfileTweets
           tweets={tweets}
@@ -88,6 +100,8 @@ const MainProfile = ({ userId, currentUserId, user }) => {
           followUser={followUser}
           refreshing={refreshing}
           onRefresh={onRefresh}
+          handleEndReached={handleEndReached}
+          isEndReached={isEndReached}
         />
       )}
     </View>

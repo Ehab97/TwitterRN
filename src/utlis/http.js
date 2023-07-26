@@ -1,5 +1,4 @@
-
-import axiosConfig from './constants/config';
+import axiosConfig from "./constants/config";
 
 export const getAllTweets = async (page = 1, limit = 5) => {
   try {
@@ -73,9 +72,10 @@ export const shareTweet = async (id) => {
   }
 };
 
-export const getMyTweets = async (userId) => {
+export const getMyTweets = async (userId, page = 1, limit = 10) => {
   try {
-    const response = await axiosConfig.get(`/tweets/user/${userId}`);
+    const response = await axiosConfig.get(`/tweets/user/${userId}?page=${page}&limit=${limit}`);
+    console.log("getMyTweets", { response: response.data.tweets });
     return response.data.tweets;
   } catch (error) {
     console.log(`Get tweet failed: ${error}`);

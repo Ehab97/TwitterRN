@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 
 const Tweet = React.memo(({ item }) => {
+  // console.log('profile tweet', item);
   const navigation = useNavigation();
 
   const goToProfile = () => {

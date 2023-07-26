@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Tweet from "../tweets/Tweet";
 import ProfileHeader from "./ProfileHeader";
+import LoadingOverlay from "../ui/LoadingOverlay";
 
 function ProfileTweets({
   tweets,
@@ -14,9 +15,9 @@ function ProfileTweets({
   followUser,
   refreshing,
   onRefresh,
+  handleEndReached,
+  isEndReached,
 }) {
-  console.log("Prfile tweets", user, currentUserID, userId, isLoading, unfollowUser, followUser);
-
   return (
     <View>
       <FlatList
@@ -37,10 +38,10 @@ function ProfileTweets({
         )}
         refreshing={refreshing}
         onRefresh={onRefresh}
-        // onEndReached={handleEnd}
-        // onEndReachedThreshold={0}
-        // ListFooterComponent={() => !isAtEndOfScrolling && <ActivityIndicator size="large" color="gray" />}
-        // scrollIndicatorInsets={{ right: 1 }}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0}
+        ListFooterComponent={<LoadingOverlay visible={isEndReached} />}
+        scrollIndicatorInsets={{ right: 1 }}
       />
     </View>
   );

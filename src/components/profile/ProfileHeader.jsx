@@ -1,21 +1,24 @@
 import React from "react";
-import { View, Image, TouchableOpacity, Text, ActivityIndicator, StyleSheet, Linking } from "react-native";
+import { View, Image, TouchableOpacity, Text, StyleSheet, Linking } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import LoadingOverlay from "../ui/LoadingOverlay";
+import { COLORS } from "../../helpers/colors";
 const ProfileHeader = ({ user, currentUserID, followUser, unfollowUser, isLoading, userId }) => {
-  console.log("profile header", user);
   return (
     <View style={styles.container}>
       {isLoading ? (
-        // <ActivityIndicator style={{ marginTop: 8 }} size="large" color="gray" />
         <LoadingOverlay visible={isLoading} />
       ) : (
         <>
           <Image
             style={styles.backgroundImage}
             source={{
-              uri: "https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80",
+              uri: `https://source.unsplash.com/random/?Cryptocurrency&${Math.random(
+                1,
+                100
+              )}&auto=format&fit=crop&w=1080&q=80`,
+              // uri: "https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80",
             }}
           />
           <View style={styles.avatarContainer}>
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   linkColor: {
-    color: "#1d9bf1",
+    color: COLORS.primary,
   },
   linkItem: {
     flexDirection: "row",
