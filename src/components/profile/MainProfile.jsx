@@ -1,17 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { getMyTweets } from "../../utlis/http";
 import LoadingOverlay from "../ui/LoadingOverlay";
-import TweetLists from "../tweets/TweetLists";
-import ProfileHeader from "./ProfileHeader";
 import ProfileTweets from "./ProfileTweets";
 import { followUserAction, unFollowUserAction } from "../../utlis/user-auth";
 import { getMyTweetsForUser } from "../../utlis/helpers";
 
 const MainProfile = ({ userId, currentUserId, user }) => {
-  const navigation = useNavigation();
-  const route = useRoute();
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -34,12 +28,10 @@ const MainProfile = ({ userId, currentUserId, user }) => {
     setLoading(true);
     try {
       const response = await getMyTweetsForUser(userId, page);
-      // console.log({ response });
       if (page === 1) setTweets(response);
       else {
         setTweets((prevTweets) => {
           const mergedTweets = [...prevTweets, ...response];
-          return mergedTweets;
           const uniqueTweets = Array.from(new Set(mergedTweets.map((tweet) => tweet._id))).map((id) =>
             mergedTweets.find((tweet) => tweet._id === id)
           );
@@ -55,7 +47,7 @@ const MainProfile = ({ userId, currentUserId, user }) => {
 
   const handleEndReached = React.useCallback(async () => {
     console.log("end reached");
-    setIsEndReached(true);
+    // setIsEndReached(true);
     setPage((prev) => prev + 1);
   }, []);
   useEffect(() => {
@@ -93,7 +85,7 @@ const MainProfile = ({ userId, currentUserId, user }) => {
         <ProfileTweets
           tweets={tweets}
           user={user}
-          isLoading={loading}
+          isLoading={isEndReached}
           userId={userId}
           currentUserID={currentUserId}
           unfollowUser={unfollowUser}
