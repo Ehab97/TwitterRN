@@ -5,137 +5,6 @@ import { AuthContext } from "../store/context/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { meregTweetAndUsers } from "../utlis/helpers";
 
-const TWEETS = [
-  {
-    id: "t1",
-    user: {
-      id: "u1",
-      username: "saurabh",
-      name: "Saurabh",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 1",
-    createdAt: "2021-03-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t2",
-    user: {
-      id: "u1",
-      username: "saurabh",
-      name: "Saurabh",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 2",
-    createdAt: "2021-03-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t3",
-    user: {
-      id: "u2",
-      username: "EHAB",
-      name: "Ehab",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 3",
-    createdAt: "2021-03-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t4",
-    user: {
-      id: "u3",
-      username: "MUSTAFA",
-      name: "Mustafa",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 4",
-    createdAt: "2021-03-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t5",
-    user: {
-      id: "u4",
-      username: "ABDULLAH",
-      name: "Abdullah",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 5",
-    createdAt: "2021-03-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t6",
-    user: {
-      id: "u5",
-      username: "ALI",
-      name: "Ali",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 6",
-    createdAt: "2021-03-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t7",
-    user: {
-      id: "u6",
-      username: "AHMED",
-      name: "Ahmed",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 7",
-    createdAt: "2023-07-02T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-  {
-    id: "t8",
-    user: {
-      id: "u7",
-      username: "MOHAMED",
-      name: "Mohamed",
-      image: "https://picsum.photos/300/300",
-    },
-    title: "Tweet 8",
-    createdAt: "2023-07-01T12:00:00.000Z",
-    content: "This is my first tweet",
-    image: "https://picsum.photos/300/300",
-    numberOfComments: 123,
-    numberOfRetweets: 11,
-    numberOfLikes: 10,
-  },
-];
-
 const HomeScreen = ({ navigation }) => {
   const authCTX = useContext(AuthContext);
   const [tweets, setTweets] = useState([]);
@@ -148,18 +17,14 @@ const HomeScreen = ({ navigation }) => {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   };
 
-  const fetchTweets = async () => {
+  const fetchTweets = React.useCallback(async () => {
     setLoading(true);
     try {
-      const data = await meregTweetAndUsers(page);
-      if (page === 1) setTweets(data);
+      const data = await meregTweetAndUsers(authCTX.userId, page);
+      if (page === 1) setTweets(data.length === 0 ? [] : data);
       else {
         setTweets((prevTweets) => {
           const mergedTweets = [...prevTweets, ...data];
-          // const uniqueTweets2 = Array.from(new Set(mergedTweets.map((tweet) => tweet._id))).map((id) =>
-          //   mergedTweets.find((tweet) => tweet._id === id)
-          // );
-          // console.log(mergedTweets.length, uniqueTweets2.length);
           const uniqueTweets = getUniqueListBy(mergedTweets, "_id");
           // console.log(uniqueTweets.length);
           return uniqueTweets;
@@ -171,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authCTX.userId, page]);
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     setPage(1);
@@ -186,13 +51,14 @@ const HomeScreen = ({ navigation }) => {
   }, [refreshing]);
 
   const handleEndReached = React.useCallback(async () => {
-    console.log("end reached");
     setPage((prev) => prev + 1);
   }, []);
-  console.log(page, tweets.length);
+
   useEffect(() => {
     fetchTweets();
-  }, [page]);
+    // onRefresh();
+  }, [authCTX.userId, page]);
+  // if (isEndReached) return <LoadingOverlay visible={isEndReached} />;
   if (loading) return <LoadingOverlay visible={loading} />;
   return (
     <View style={styles.container}>
@@ -210,10 +76,6 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-    // backgroundColor: "white",
-    // width: "100%",
   },
 });
 

@@ -1,7 +1,6 @@
 import "react-native-gesture-handler";
-import { View, Text } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
-import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";

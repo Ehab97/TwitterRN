@@ -10,6 +10,16 @@ export const getAllTweets = async (page = 1, limit = 5) => {
     throw new Error(`${error}`);
   }
 };
+export const getFollowingsTweets = async (userId,page = 1, limit = 5) => {
+  try {
+    console.log(`/tweets?page=${page}&limit=${limit}`);
+    const response = await axiosConfig.get(`/tweets/followings/${userId}?page=${page}&limit=${limit}`);
+    return response.data;
+  } catch (error) {
+    console.log(`Get all tweets failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
 
 export const createTweet = async (tweet) => {
   console.log("createTweet", tweet);

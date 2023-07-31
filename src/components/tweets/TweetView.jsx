@@ -1,19 +1,35 @@
-import { View, Text, StyleSheet, Image, Pressable, Platform } from "react-native";
+import { View, Text, StyleSheet, Image, Platform } from "react-native";
 import React, { useState } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
 import TweetIcon from "../ui/TweetIcon";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
 import { COLORS } from "../../helpers/colors";
+import DropDownModal from "../ui/DropDownModal";
+import { deleteTweet } from "../../utlis/http";
+import LoadingOverlay from "../ui/LoadingOverlay";
 
 const TweetView = ({ tweet }) => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const handleLikeClick = () => {};
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
-  console.log({ tweet });
+  const handleDeleteClick = async () => {
+    setLoading(true);
+    try {
+      let tweetId = tweet._id;
+      const res = await deleteTweet(tweetId);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      navigation.navigate("Home");
+      setLoading(false);
+    }
+  };
+  if (loading) return <LoadingOverlay visble={loading} />;
+
   return (
     <View style={styles.container}>
       <View style={[styles.header, styles.flexRow, styles.justifyContentSpaceBetween, styles.padding15]}>
@@ -29,13 +45,15 @@ const TweetView = ({ tweet }) => {
             <Text style={styles.username}>@{tweet?.user?.userName}</Text>
           </View>
         </View>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate("TweetAction");
+            // setShowDropdown(true);
           }}
         >
           <MaterialIcons name="more-vert" size={24} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <DropDownModal deleteTweet={handleDeleteClick} />
       </View>
       <View style={styles.tweetContainer}>
         <Text style={styles.tweet}>{tweet?.content}</Text>

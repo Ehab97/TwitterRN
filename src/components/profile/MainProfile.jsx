@@ -11,18 +11,7 @@ const MainProfile = ({ userId, currentUserId, user }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [isEndReached, setIsEndReached] = useState(false);
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    setPage(1);
-    setIsEndReached(false);
-    try {
-      await fetchTweets();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setRefreshing(false);
-    }
-  }, [refreshing]);
+ 
 
   const fetchTweets = React.useCallback(async () => {
     setLoading(true);
@@ -45,9 +34,19 @@ const MainProfile = ({ userId, currentUserId, user }) => {
     }
   }, [userId, page]);
 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    setPage(1);
+    setIsEndReached(false);
+    try {
+      await fetchTweets();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshing]);
   const handleEndReached = React.useCallback(async () => {
-    console.log("end reached");
-    // setIsEndReached(true);
     setPage((prev) => prev + 1);
   }, []);
   useEffect(() => {

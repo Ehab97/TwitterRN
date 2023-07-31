@@ -1,5 +1,5 @@
-import { View, Text,StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 
@@ -38,8 +38,12 @@ const TweetDropDwonAction = () => {
       <FlatList
         data={options}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.label}</Text>
+          <View
+            style={styles.listItem}
+          >
+            <Text
+              style={styles.listItemLabel}
+            >{item.label}</Text>
             {item.icon}
           </View>
         )}
@@ -48,5 +52,25 @@ const TweetDropDwonAction = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {},
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+  },
+  listItemLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 16,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#e6ecf0",
+    marginVertical: 8,
+  },
+  
+});
 
 export default TweetDropDwonAction;
