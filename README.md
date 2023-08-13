@@ -13,7 +13,7 @@ this a twitter building with react native
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/de308c38-a384-4b41-8d84-b9ac623e83f1" width="900" height="450" style="object-fit: contain;">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/9674301c-4005-4e5d-9e42-d61ccb4880f4" width="300" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/6e245c73-ac55-460e-b4a1-258ca75c524e" width="300" height="650">
-<img src="https://github.com/Ehab97/TwitterRN/assets/28493731/f27530e9-4e9c-432b-97d6-57a72517532e" width="300" height="650">
+<img src="https://github.com/Ehab97/TwitterRN/assets/28493731/9e2c444f-8e00-4495-9480-32a5df585b09" width="300" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/b34e2c7a-e972-463c-bb2a-1e8e7b84aca5" width="300" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/ff280a67-cbf7-4db5-ae36-913bdb1d985f" width="300" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/706311db-1f84-4c9e-85e1-5adb776e332a" width="300" height="650">
