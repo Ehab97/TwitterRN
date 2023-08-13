@@ -10,7 +10,7 @@ this a twitter building with react native
 2. Install the dependencies:
 3. expo start or npx expo start
 
-<img src="https://github.com/Ehab97/TwitterRN/assets/28493731/de308c38-a384-4b41-8d84-b9ac623e83f1" width="300" height="650">
+<img src="https://github.com/Ehab97/TwitterRN/assets/28493731/de308c38-a384-4b41-8d84-b9ac623e83f1" width="700" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/9674301c-4005-4e5d-9e42-d61ccb4880f4" width="300" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/6e245c73-ac55-460e-b4a1-258ca75c524e" width="300" height="650">
 <img src="https://github.com/Ehab97/TwitterRN/assets/28493731/f27530e9-4e9c-432b-97d6-57a72517532e" width="300" height="650">
