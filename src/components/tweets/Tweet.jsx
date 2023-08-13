@@ -1,14 +1,18 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TweetIcon from "../ui/TweetIcon";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-
+import { getLikesByTweetId, likeTweet } from "../../utlis/http";
+import { AuthContext } from "../../store/context/auth-context";
+import { COLORS } from "../../helpers/colors";
+import LoadingOverlay from "../ui/LoadingOverlay";
 
 const Tweet = React.memo(({ item }) => {
-  // console.log('profile tweet', item);
+  const authCTX = useContext(AuthContext);
   const navigation = useNavigation();
-
+  const [likesCount, setLikesCount] = useState(item.likes ?? 0);
+  const [loading, setLoading] = useState(false);
   const goToProfile = () => {
     navigation.push("Profile", { userId: item.user.id });
   };
@@ -39,11 +43,32 @@ const Tweet = React.memo(({ item }) => {
   const goToTweet = () => {
     navigation.push("Tweet", { tweetId: item._id });
   };
-  const handleLikeClick = () => {};
+  const handleLikeClick = async () => {
+    setLoading(true);
+    try {
+      let tweetId = item._id;
+      const res = await likeTweet(tweetId);
+      console.log(res, item.userLikes);
+      if (!item.userLikes.includes(authCTX.userId)) {
+        setLikesCount(likesCount + 1);
+      } else {
+        setLikesCount(likesCount - 1);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
 
+  useEffect(() => {}, [likesCount]);
+
+  if (loading) return <LoadingOverlay loading={loading} />;
+  console.log(`userLikes`, item.userLikes, authCTX?.userId);
   return (
     <View style={[styles.container, styles.flexRow]}>
       <TouchableOpacity onPress={goToProfile}>
@@ -94,11 +119,11 @@ const Tweet = React.memo(({ item }) => {
             />
             <TweetIcon
               onPress={handleLikeClick}
-              text={item.likes}
-              iconName="heart-outline"
+              text={item?.likes}
+              iconName={item.userLikes.includes(authCTX.userId) ? "heart" : "heart-outline"}
               iconSize={22}
-              iconColor="grey"
-              isLiked
+              iconColor={item.userLikes.includes(authCTX.userId) ? COLORS.secondary : "grey"}
+              isLiked={item.userLikes.includes(authCTX.userId)}
               style={styles.icon}
             />
             <TweetIcon

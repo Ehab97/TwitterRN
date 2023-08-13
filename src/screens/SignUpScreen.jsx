@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Alert } from "react-native";
-
 import { AuthContext } from "../store/context/auth-context";
-import { createUser } from "../utlis/auth";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import AuthContent from "../components/auth/AuthContent";
 import { register } from "../utlis/user-auth";

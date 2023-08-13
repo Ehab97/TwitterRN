@@ -9,6 +9,7 @@ const InputForm = ({ label, keyboardType, secure, onUpdateValue, value, isInvali
       <TextInput
         style={[styles.input, isInvalid && styles.inputInvalid]}
         // autoCapitalize={false}
+        placeholder={label}
         autoCapitalize="none"
         keyboardType={keyboardType}
         secureTextEntry={secure}
@@ -47,3 +48,5 @@ const styles = StyleSheet.create({
   },
 });
 export default InputForm;
+//ehabreda04@gmail.com
+//ehabred04@gmail.com

@@ -1,18 +1,22 @@
 import { getAllTweets, getFollowingsTweets, getMyTweets, getTweetById } from "./http";
 import { getAllUserInfo, getUserInfo } from "./user-auth";
 
-export const meregTweetAndUsers = async (userId,page, limit) => {
+export const meregTweetAndUsers = async (userId, page, limit) => {
+  console.log("getTweetsWithUser", userId, page);
   try {
     let tweets = [];
     if (userId) {
-      tweets = await getFollowingsTweets(userId,page, limit);
-    }else{
+      tweets = await getFollowingsTweets(userId, page, limit);
+      if (tweets.tweets.length === 0) {
+        tweets = await getAllTweets(page, limit);
+      }
+    } else {
       tweets = await getAllTweets(page, limit);
     }
     // const tweets = await getAllTweets(page, limit);
     // const tweets = await getFollowingsTweets(userId,page, limit);
     const users = await getAllUserInfo();
-    console.log("tweet", tweets.tweets.length);
+    console.log("tweets===>", tweets.tweets.length,tweets.tweets);
     const items = tweets.tweets.map((tweet) => {
       const userId = tweet.user.id;
       const user = users.find((user) => userId === user._id);

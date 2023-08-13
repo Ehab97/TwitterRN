@@ -4,6 +4,7 @@ import LoadingOverlay from "../ui/LoadingOverlay";
 import ProfileTweets from "./ProfileTweets";
 import { followUserAction, unFollowUserAction } from "../../utlis/user-auth";
 import { getMyTweetsForUser } from "../../utlis/helpers";
+import { useNavigation } from "@react-navigation/native";
 
 const MainProfile = ({ userId, currentUserId, user }) => {
   const [tweets, setTweets] = useState([]);
@@ -11,7 +12,7 @@ const MainProfile = ({ userId, currentUserId, user }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [isEndReached, setIsEndReached] = useState(false);
- 
+  const navigation = useNavigation();
 
   const fetchTweets = React.useCallback(async () => {
     setLoading(true);
@@ -57,6 +58,8 @@ const MainProfile = ({ userId, currentUserId, user }) => {
     setLoading(true);
     try {
       const res = await followUserAction(currentUserId, userId);
+
+      navigation.push("Profile", { userId: userId });
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -68,6 +71,7 @@ const MainProfile = ({ userId, currentUserId, user }) => {
     setLoading(true);
     try {
       const res = await unFollowUserAction(currentUserId, userId);
+      navigation.push("Profile", { userId: userId });
       console.log(res);
     } catch (error) {
       console.log(error);

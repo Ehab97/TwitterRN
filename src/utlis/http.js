@@ -10,7 +10,7 @@ export const getAllTweets = async (page = 1, limit = 5) => {
     throw new Error(`${error}`);
   }
 };
-export const getFollowingsTweets = async (userId,page = 1, limit = 5) => {
+export const getFollowingsTweets = async (userId, page = 1, limit = 5) => {
   try {
     console.log(`/tweets?page=${page}&limit=${limit}`);
     const response = await axiosConfig.get(`/tweets/followings/${userId}?page=${page}&limit=${limit}`);
@@ -62,9 +62,10 @@ export const updateTweet = async (id, tweet) => {
   }
 };
 
-export const likeTweet = async (id) => {
+export const likeTweet = async (tweetId) => {
+  console.log("likeTweet", tweetId);
   try {
-    const response = await axiosConfig.put(`/tweets/${id}/like`);
+    const response = await axiosConfig.put(`/tweets/${tweetId}/like`);
     return response.data;
   } catch (error) {
     console.log(`Like tweet failed: ${error}`);
@@ -89,6 +90,17 @@ export const getMyTweets = async (userId, page = 1, limit = 10) => {
     return response.data.tweets;
   } catch (error) {
     console.log(`Get tweet failed: ${error}`);
+    throw new Error(`${error}`);
+  }
+};
+
+export const getLikesByTweetId = async (tweetId) => {
+  try {
+    const response = await axiosConfig.get(`/likes/${tweetId}`);
+    console.log("getLikesByTweetId", { response: response.data.likes });
+    return response.data.likes;
+  } catch (error) {
+    console.log(`Get likes failed: ${error}`);
     throw new Error(`${error}`);
   }
 };

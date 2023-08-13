@@ -1,17 +1,38 @@
 import { View, Text, StyleSheet, Image, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TweetIcon from "../ui/TweetIcon";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
 import { COLORS } from "../../helpers/colors";
 import DropDownModal from "../ui/DropDownModal";
-import { deleteTweet } from "../../utlis/http";
+import { deleteTweet, likeTweet } from "../../utlis/http";
 import LoadingOverlay from "../ui/LoadingOverlay";
+import { AuthContext } from "../../store/context/auth-context";
 
 const TweetView = ({ tweet }) => {
+  console.log(tweet);
+  const authCTX = useContext(AuthContext);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const handleLikeClick = () => {};
+  const [likesCount, setLikesCount] = useState(tweet?.likes ?? 0);
+  const handleLikeClick = async () => {
+    setLoading(true);
+    try {
+      let tweetId = tweet._id;
+      const res = await likeTweet(tweetId);
+      console.log(res, tweet.userLikes);
+      if (!tweet.userLikes.includes(authCTX.userId)) {
+        setLikesCount(likesCount + 1);
+      } else {
+        setLikesCount(likesCount - 1);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      navigation.push("Tweet", { tweetId: tweet._id });
+      setLoading(false);
+    }
+  };
   const handleRetweetClick = () => {};
   const handleCommentClick = () => {};
   const handleShareClick = () => {};
@@ -24,7 +45,7 @@ const TweetView = ({ tweet }) => {
     } catch (error) {
       console.log(error);
     } finally {
-      navigation.navigate("Home");
+      navigation.push("Tab");
       setLoading(false);
     }
   };
@@ -96,11 +117,11 @@ const TweetView = ({ tweet }) => {
         <TweetIcon onPress={handleRetweetClick} text={""} iconName="repeat-outline" iconSize={22} iconColor="grey" />
         <TweetIcon
           onPress={handleLikeClick}
-          text={""}
-          iconName="heart-outline"
+          text={likesCount}
+          iconName={tweet?.userLikes.includes(authCTX.userId) ? "heart" : "heart-outline"}
           iconSize={22}
-          iconColor="grey"
-          isCliked
+          iconColor={tweet?.userLikes.includes(authCTX.userId) ? COLORS.secondary : "grey"}
+          isLiked={tweet?.userLikes.includes(authCTX.userId)}
         />
         <TweetIcon
           onPress={handleShareClick}

@@ -19,7 +19,7 @@ import LoadingOverlay from "./src/components/ui/LoadingOverlay";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignUpScreen";
 import { COLORS } from "./src/helpers/colors";
-
+import { RootSiblingParent } from "react-native-root-siblings";
 import IconButton from "./src/components/ui/IconButton";
 
 const Tab = createBottomTabNavigator();
@@ -199,9 +199,11 @@ const Root = () => {
 const App = () => {
   return (
     <>
-      <AuthContextProvider>
-        <Root />
-      </AuthContextProvider>
+      <RootSiblingParent>
+        <AuthContextProvider>
+          <Root />
+        </AuthContextProvider>
+      </RootSiblingParent>
     </>
   );
 };
